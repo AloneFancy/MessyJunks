@@ -807,7 +807,7 @@
 		//"window.activeBorder": null,
 		//"window.inactiveBorder": null
 	},
-	"editor.tokenColorCustomizations": [
+	"editor.tokenColorCustomizations": {"textMateRules":[
 		{
 			"scope": [
 				"meta.embedded",
@@ -1378,7 +1378,7 @@
 			}
 		}
 	]
-
+	}
     "markdown.marp.themes": [
         "https://raw.githubusercontent.com/kaisugi/marp-theme-academic/main/themes/academic.css"
         ,"https://raw.githubusercontent.com/AloneFancy/MessyJunks/main/theme.css"
