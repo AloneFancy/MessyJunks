@@ -1,16 +1,721 @@
-div.twocols {
-  margin-top: 35px;
-  column-count: 2;
+/* =============================================================================
+   @theme kenoma-academic
+   Archive of Two Truths — Marp Presentation Theme
+   
+   HEADER SYSTEM — Section-Aware
+   Apply a class to any slide to get its distinct header register:
+   
+     <!-- _class: wa        -->   World A — Sacred Fire    (amber)
+     <!-- _class: wb        -->   World B — The Hollow     (cold blue)
+     <!-- _class: bms       -->   Behavioral Model System  (crimson data)
+     <!-- _class: va        -->   Vanguard A               (military gold)
+     <!-- _class: vb        -->   Vanguard B               (philosophical slate)
+     <!-- _class: puzzle    -->   Puzzle / Mechanic        (parchment ochre)
+     <!-- _class: iron      -->   Iron Laws                (warning red)
+     <!-- _class: demo      -->   Demo / Check             (verification green)
+     <!-- _class: audio     -->   Audio / Dark Voice       (binaural violet)
+     <!-- _class: crossing  -->   Traversal / Crossing     (dual-world split)
+     <!-- _class: lead      -->   Title slide              (no header, full field)
+
+============================================================================= */
+
+@import 'gaia';
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Source+Code+Pro:wght@400;600&display=swap');
+
+
+/* ─────────────────────────────────────────────
+   COLOR REGISTER
+   ───────────────────────────────────────────── */
+
+:root {
+  /* World A palette — Sacred Fire */
+  --wa-fire:          #c8861a;
+  --wa-ember:         #e09848;
+  --wa-deep:          #8b1a1a;
+  --wa-bg:            #120e08;
+
+  /* World B palette — The Hollow */
+  --wb-cold:          #5a8aaa;
+  --wb-stone:         #2a3a4a;
+  --wb-bg:            #070c12;
+
+  /* Archive neutral */
+  --parchment:        #ddd4b8;
+  --stone-mid:        #4a4035;
+  --stone-light:      #8a7a68;
+  --stone-pale:       #c0b098;
+
+  /* System */
+  --color-background: #0c0a06;
+  --color-foreground: #d0c5a8;
+  --color-highlight:  #c8861a;
+
+  --header-h:         52px;
+  --accent-stripe:    4px;
 }
-div.twocols p:first-child,
-div.twocols h1:first-child,
-div.twocols h2:first-child,
-div.twocols ul:first-child,
-div.twocols ul li:first-child,
-div.twocols ul li p:first-child {
-  margin-top: 0 !important;
+
+
+/* ─────────────────────────────────────────────
+   BASE SECTION
+   ───────────────────────────────────────────── */
+
+section {
+  background-color: var(--color-background);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 12% 88%, rgba(139, 26, 26, 0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 40% at 88% 12%, rgba(20, 36, 58, 0.10) 0%, transparent 100%);
+  font-family: 'IM Fell English', Georgia, serif;
+  color: var(--color-foreground);
+  padding-top:    calc(var(--header-h) + 22px);
+  padding-left:   48px;
+  padding-right:  48px;
+  padding-bottom: 40px;
 }
-div.twocols p.break {
-  break-before: column;
-  margin-top: 0;
+
+/* Page number */
+section::after {
+  font-family: 'Cinzel', serif;
+  font-weight:  400;
+  font-size:    0.68em;
+  color:        var(--stone-light);
+  content:      attr(data-marpit-pagination) ' · ' attr(data-marpit-pagination-total);
+}
+
+
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY
+   ───────────────────────────────────────────── */
+
+h1 {
+  font-family:     'Cinzel', serif;
+  font-weight:     700;
+  font-size:       1.7em;
+  color:           var(--wa-ember);
+  letter-spacing:  0.04em;
+  border-bottom:   1px solid rgba(200, 134, 26, 0.28);
+  padding-bottom:  0.3em;
+  margin-bottom:   0.5em;
+  line-height:     1.2;
+}
+
+h2 {
+  font-family:    'Cinzel', serif;
+  font-weight:    600;
+  font-size:      1.15em;
+  color:          var(--parchment);
+  letter-spacing: 0.025em;
+}
+
+h3 {
+  font-family: 'IM Fell English', serif;
+  font-style:  italic;
+  font-size:   1em;
+  color:       var(--stone-light);
+}
+
+h4, h5 {
+  font-family: 'Cinzel', serif;
+  font-size:   0.85em;
+  color:       var(--stone-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+p {
+  line-height: 1.78;
+  color:       var(--color-foreground);
+}
+
+strong {
+  color:       var(--wa-ember);
+  font-weight: 700;
+  /* No -webkit-text-stroke — override gaia */
+  -webkit-text-stroke: 0;
+}
+
+em {
+  color:       var(--stone-pale);
+  font-style:  italic;
+}
+
+a {
+  color:           var(--wa-fire);
+  text-decoration: none;
+  border-bottom:   1px dotted rgba(200, 134, 26, 0.4);
+}
+
+
+/* ─────────────────────────────────────────────
+   LISTS
+   ───────────────────────────────────────────── */
+
+ul, ol {
+  color:       var(--color-foreground);
+  line-height: 1.72;
+}
+
+ul li::marker {
+  color: var(--wa-fire);
+}
+
+ol li::marker {
+  font-family: 'Cinzel', serif;
+  color:       var(--stone-light);
+  font-size:   0.85em;
+}
+
+ul ul {
+  font-size: 0.88em;
+  color:     var(--stone-light);
+}
+
+ul ul li::marker {
+  color: var(--stone-mid);
+}
+
+
+/* ─────────────────────────────────────────────
+   CODE
+   ───────────────────────────────────────────── */
+
+code {
+  font-family:  'Source Code Pro', monospace;
+  font-size:    0.83em;
+  background:   rgba(200, 134, 26, 0.08);
+  border:       1px solid rgba(200, 134, 26, 0.18);
+  border-radius: 3px;
+  padding:      0.06em 0.36em;
+  color:        var(--wa-ember);
+}
+
+pre {
+  background:   #09070400;
+  border:       1px solid rgba(200, 134, 26, 0.15);
+  border-left:  3px solid var(--wa-fire);
+  border-radius: 4px;
+  padding:      1em 1.3em;
+  background-color: #09070480;
+}
+
+pre code {
+  background:   none;
+  border:       none;
+  padding:      0;
+  color:        var(--parchment);
+  font-size:    0.78em;
+}
+
+
+/* ─────────────────────────────────────────────
+   BLOCKQUOTE (footnote — preserves original positioning)
+   ───────────────────────────────────────────── */
+
+blockquote {
+  max-width:    90%;
+  border-top:   1px solid rgba(200, 134, 26, 0.22);
+  border-left:  none;
+  background:   none;
+  font-size:    60%;
+  font-style:   italic;
+  color:        var(--stone-light);
+  position:     absolute;
+  bottom:       20px;
+  padding-top:  0.5em;
+}
+
+blockquote::before { content: ""; }
+blockquote::after  { content: ""; }
+blockquote p       { color: var(--stone-light); margin: 0; }
+
+
+/* ─────────────────────────────────────────────
+   TABLES
+   ───────────────────────────────────────────── */
+
+table {
+  border-collapse: collapse;
+  font-size:       0.8em;
+  width:           100%;
+}
+
+th {
+  font-family:     'Cinzel', serif;
+  background:      rgba(139, 26, 26, 0.35);
+  color:           var(--parchment);
+  border:          1px solid rgba(200, 134, 26, 0.2);
+  padding:         0.45em 0.8em;
+  letter-spacing:  0.03em;
+  font-weight:     600;
+}
+
+td {
+  border:  1px solid rgba(200, 134, 26, 0.1);
+  padding: 0.38em 0.8em;
+  color:   var(--color-foreground);
+}
+
+tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+
+/* ─────────────────────────────────────────────
+   IMAGE HELPERS
+   ───────────────────────────────────────────── */
+
+img[alt~="center"] {
+  display: block;
+  margin:  0 auto;
+}
+
+img[alt~="small"] {
+  max-width: 40%;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   THE HEADER — DEFAULT (Archive General)
+   Base register: deep warm stone, amber left-stripe, archive glyph
+═══════════════════════════════════════════════════════════════ */
+
+header {
+  /* Geometry */
+  height:      var(--header-h);
+  display:     flex;
+  align-items: center;
+  padding:     0 24px 0 20px;
+  gap:         10px;
+
+  /* Typography */
+  font-family:    'Cinzel', serif;
+  font-size:      0.75em;
+  font-weight:    600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+
+  /* Default skin — warm archive darkness */
+  background: linear-gradient(
+    100deg,
+    #1c1208 0%,
+    #241808 45%,
+    #1a1006 100%
+  );
+  border-bottom: 1px solid rgba(200, 134, 26, 0.22);
+  color:         var(--wa-fire);
+
+  /* Left-edge accent stripe */
+  box-shadow:
+    inset var(--accent-stripe) 0 0 rgba(200, 134, 26, 0.6),
+    0 2px 14px rgba(0, 0, 0, 0.65);
+}
+
+/* Section marker glyph */
+header::before {
+  content:     '⌖';
+  font-size:   1.15em;
+  color:       rgba(200, 134, 26, 0.55);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   WORLD A — Sacred Fire
+   class: wa
+   Register: amber ember, fire stripe, fire altar glyph
+═══════════════════════════════════════════════════════════════ */
+
+section.wa header {
+  background: linear-gradient(
+    100deg,
+    #280e04 0%,
+    #3c1c08 45%,
+    #2a1006 100%
+  );
+  border-bottom: 1px solid rgba(224, 152, 72, 0.38);
+  color:         var(--wa-ember);
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #e09848,
+    0 2px 20px rgba(200, 80, 10, 0.18);
+}
+
+section.wa header::before {
+  content: '🔥';
+  font-size: 0.95em;
+  filter:    drop-shadow(0 0 4px rgba(255, 160, 40, 0.5));
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   WORLD B — The Hollow
+   class: wb
+   Register: cold slate blue, hollow circle glyph, near-silence feel
+═══════════════════════════════════════════════════════════════ */
+
+section.wb header {
+  background: linear-gradient(
+    100deg,
+    #04080f 0%,
+    #0a1622 45%,
+    #060c14 100%
+  );
+  border-bottom: 1px solid rgba(90, 138, 170, 0.32);
+  color:         #82aec8;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #5a8aaa,
+    0 2px 14px rgba(0, 20, 40, 0.45);
+}
+
+section.wb header::before {
+  content:    '◎';
+  font-size:  1.05em;
+  color:      rgba(90, 138, 170, 0.6);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   BMS — Behavioral Model System
+   class: bms
+   Register: deep crimson/maroon, data-stream feel, double-arrow glyph
+═══════════════════════════════════════════════════════════════ */
+
+section.bms header {
+  background: linear-gradient(
+    100deg,
+    #0f0408 0%,
+    #200810 45%,
+    #140408 100%
+  );
+  border-bottom: 1px solid rgba(180, 40, 70, 0.42);
+  color:         #c06070;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #8b1a2a,
+    0 2px 14px rgba(100, 0, 20, 0.30);
+}
+
+section.bms header::before {
+  content:        '▸▸';
+  font-size:      0.88em;
+  letter-spacing: -0.08em;
+  color:          rgba(139, 26, 42, 0.8);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VANGUARD (generic — both)
+   class: vanguard
+   Register: antique gold, diamond glyph, 300-year intelligence
+═══════════════════════════════════════════════════════════════ */
+
+section.vanguard header {
+  background: linear-gradient(
+    100deg,
+    #10100a 0%,
+    #1e1c10 45%,
+    #141208 100%
+  );
+  border-bottom: 1px solid rgba(200, 188, 100, 0.28);
+  color:         #c0b870;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #a09848,
+    0 2px 14px rgba(0, 0, 0, 0.55);
+}
+
+section.vanguard header::before {
+  content:   '◈';
+  font-size: 1.05em;
+  color:     rgba(160, 152, 72, 0.65);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VANGUARD A — Sacred Fire
+   class: va
+   Register: military warm gold, logistics precision, em-dash label
+═══════════════════════════════════════════════════════════════ */
+
+section.va header {
+  background: linear-gradient(
+    100deg,
+    #180e04 0%,
+    #281808 45%,
+    #1c1004 100%
+  );
+  border-bottom: 1px solid rgba(200, 140, 64, 0.32);
+  color:         #d4a060;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #c87830,
+    0 2px 14px rgba(140, 64, 10, 0.22);
+}
+
+section.va header::before {
+  content:        '— VA';
+  font-size:      0.82em;
+  letter-spacing: 0.18em;
+  color:          rgba(200, 120, 48, 0.75);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VANGUARD B — The Hollow
+   class: vb
+   Register: philosophical cold slate, long thought, em-dash label
+═══════════════════════════════════════════════════════════════ */
+
+section.vb header {
+  background: linear-gradient(
+    100deg,
+    #060c16 0%,
+    #0e1c2c 45%,
+    #081422 100%
+  );
+  border-bottom: 1px solid rgba(100, 154, 194, 0.28);
+  color:         #90b8d8;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #5a8aaa,
+    0 2px 14px rgba(10, 30, 60, 0.32);
+}
+
+section.vb header::before {
+  content:        '— VB';
+  font-size:      0.82em;
+  letter-spacing: 0.18em;
+  color:          rgba(90, 138, 170, 0.7);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PUZZLE — Mechanic / Author
+   class: puzzle
+   Register: ochre parchment, archaeological feel, grid glyph
+═══════════════════════════════════════════════════════════════ */
+
+section.puzzle header {
+  background: linear-gradient(
+    100deg,
+    #0e0e08 0%,
+    #1c1a0c 45%,
+    #111006 100%
+  );
+  border-bottom: 1px solid rgba(168, 158, 104, 0.28);
+  color:         #b8a878;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #887858,
+    0 2px 14px rgba(0, 0, 0, 0.48);
+}
+
+section.puzzle header::before {
+  content:   '⊞';
+  font-size: 1.1em;
+  color:     rgba(136, 120, 88, 0.65);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   IRON LAWS — Non-Negotiable
+   class: iron
+   Register: stark warning red, thick bottom border, flag glyph
+═══════════════════════════════════════════════════════════════ */
+
+section.iron header {
+  background: linear-gradient(
+    100deg,
+    #090606 0%,
+    #160c0c 45%,
+    #0d0606 100%
+  );
+  border-bottom: 2px solid rgba(200, 50, 50, 0.55);
+  color:         #d04848;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #c03030,
+    0 2px 18px rgba(140, 0, 0, 0.22);
+}
+
+section.iron header::before {
+  content:   '⚑';
+  font-size: 1.0em;
+  color:     rgba(192, 48, 48, 0.75);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   DEMO / VERIFICATION CHECK
+   class: demo
+   Register: verification green, pass glyph
+═══════════════════════════════════════════════════════════════ */
+
+section.demo header {
+  background: linear-gradient(
+    100deg,
+    #040e06 0%,
+    #0a1c0e 45%,
+    #071008 100%
+  );
+  border-bottom: 1px solid rgba(80, 164, 80, 0.32);
+  color:         #70b870;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #508850,
+    0 2px 14px rgba(0, 40, 0, 0.30);
+}
+
+section.demo header::before {
+  content:   '✓';
+  font-size: 1.1em;
+  color:     rgba(80, 136, 80, 0.72);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   AUDIO / DARK VOICE — Binaural
+   class: audio
+   Register: violet/amethyst, sound-wave triple-parenthesis glyph
+═══════════════════════════════════════════════════════════════ */
+
+section.audio header {
+  background: linear-gradient(
+    100deg,
+    #0c0810 0%,
+    #1a1024 45%,
+    #100c18 100%
+  );
+  border-bottom: 1px solid rgba(160, 100, 200, 0.28);
+  color:         #b890d0;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #8050a0,
+    0 2px 14px rgba(60, 0, 80, 0.22);
+}
+
+section.audio header::before {
+  content:        ')))';
+  font-size:      0.82em;
+  letter-spacing: -0.14em;
+  color:          rgba(128, 80, 160, 0.7);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TRAVERSAL / CROSSING — Iron Rule
+   class: crossing
+   Register: dual-world split — warm left, cold right, double-arrow
+═══════════════════════════════════════════════════════════════ */
+
+section.crossing header {
+  background: linear-gradient(
+    100deg,
+    #160e04 0%,
+    #0a1420 50%,
+    #060c10 100%
+  );
+  border-bottom: 1px solid rgba(120, 170, 140, 0.28);
+  color:         #98c0a8;
+  box-shadow:
+    inset var(--accent-stripe) 0 0 #c8861a,
+    inset calc(-1 * var(--accent-stripe)) 0 0 #5a8aaa,
+    0 2px 14px rgba(0, 0, 0, 0.50);
+}
+
+section.crossing header::before {
+  content:   '⇌';
+  font-size: 1.1em;
+  color:     rgba(100, 160, 130, 0.65);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LEAD — Title / Cover Slide
+   class: lead
+   Full-field dark atmosphere — header stripped, grand heading
+═══════════════════════════════════════════════════════════════ */
+
+section.lead {
+  background-color: #060402;
+  background-image:
+    radial-gradient(ellipse 55% 50% at 18% 82%, rgba(139, 26, 26, 0.14) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 45% at 82% 18%, rgba(20, 40, 70, 0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(200, 134, 26, 0.04) 0%, transparent 100%);
+  display:          flex;
+  flex-direction:   column;
+  justify-content:  center;
+  padding-top:      var(--header-h);
+}
+
+section.lead h1 {
+  font-family:     'Cinzel', serif;
+  font-weight:     700;
+  font-size:       2.1em;
+  color:           var(--wa-ember);
+  text-align:      left;
+  border-bottom:   1px solid rgba(200, 134, 26, 0.28);
+  padding-bottom:  0.4em;
+  text-shadow:     0 0 50px rgba(200, 100, 20, 0.25);
+  -webkit-text-stroke: 0;
+  letter-spacing:  0.04em;
+}
+
+section.lead h1 strong {
+  -webkit-text-stroke: 0;
+  color:           #f0b870;
+}
+
+section.lead h2 {
+  font-family: 'IM Fell English', serif;
+  font-style:  italic;
+  font-weight: 400;
+  font-size:   1em;
+  color:       var(--stone-light);
+  text-align:  left;
+  margin-top:  0.6em;
+  letter-spacing: 0;
+}
+
+section.lead h2 strong {
+  -webkit-text-stroke: 0;
+  color: var(--stone-pale);
+}
+
+section.lead h3 {
+  font-style:  italic;
+  color:       var(--stone-mid);
+  font-size:   0.85em;
+  margin-top:  1em;
+}
+
+section.lead p {
+  text-align: left;
+  font-style: italic;
+  font-size:  0.88em;
+  color:      var(--stone-mid);
+}
+
+/* Lead slide: suppress header bar entirely */
+section.lead header {
+  background:    transparent;
+  border-bottom: none;
+  box-shadow:    none;
+  color:         transparent;
+}
+
+section.lead header::before {
+  content: '';
+}
+
+/* Lead slide: page number hidden */
+section.lead::after {
+  content: '';
+}
+
+
+/* ─────────────────────────────────────────────
+   UTILITY: inline highlight chips
+   Use <mark> in markdown for BMS register labels
+   ───────────────────────────────────────────── */
+
+mark {
+  background: rgba(139, 26, 26, 0.3);
+  color:      var(--wa-ember);
+  border:     1px solid rgba(200, 134, 26, 0.25);
+  border-radius: 3px;
+  padding:    0.05em 0.3em;
+  font-family: 'Source Code Pro', monospace;
+  font-size:  0.85em;
 }
