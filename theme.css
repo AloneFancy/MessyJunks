@@ -1,45 +1,55 @@
 /* =============================================================================
-   @theme kenoma-academic
-   Archive of Two Truths — Marp Presentation Theme
-   Base: kaisugi/marp-theme-academic
+   @theme kenoma-academic  —  Archive of Two Truths · Marp Presentation Theme
+   Base: kaisugi/marp-theme-academic · Font: Cormorant Garamond (Vietnamese + Persian)
 
-   TYPOGRAPHY
-   ─── Cormorant Garamond (Google Fonts) ───────────────────────────────────────
-   Selected for: full Vietnamese diacritic coverage (Latin Extended Additional)
-   + Persian manuscript aesthetic — its letterforms descend from Renaissance
-   calligraphy that itself drew from Arabic-Persian reed-pen traditions.
-   The italic weight reads like strokes from a Persian qalam. Small-caps
-   (via font-variant-caps) give the inscriptional archaic register that
-   Cinzel provided, without sacrificing any Vietnamese glyph.
+   SLIDE CLASSES
+   ─── Header register ─────────────────────────────────────────────────────────
+     wa        World A — Sacred Fire         amber
+     wb        World B — The Hollow          cold blue
+     bms       Behavioral Model System       deep crimson
+     va        Vanguard A                    military gold
+     vb        Vanguard B                    philosophical slate
+     puzzle    Puzzle / Mechanic             parchment ochre
+     iron      Iron Laws                     warning red
+     demo      Demo / Verification           green
+     audio     Audio / Dark Voice            violet
+     crossing  Traversal — Iron Rule         dual stripe
+     lead      Title / Cover                 full field, no header
 
-   HEADER SYSTEM — apply a _class to any slide:
-     wa        World A — Sacred Fire       amber
-     wb        World B — The Hollow        cold blue
-     bms       Behavioral Model System     deep crimson
-     va        Vanguard A                  military gold
-     vb        Vanguard B                  philosophical slate
-     puzzle    Puzzle / Mechanic           parchment ochre
-     iron      Iron Laws                   warning red
-     demo      Demo / Verification         green
-     audio     Audio / Dark Voice          violet
-     crossing  Traversal — Iron Rule       dual stripe
-     lead      Title slide                 full field, no header bar
+   ─── Layout modifiers (stack with any header class) ──────────────────────────
+     compact   Dense slides — smaller text, tighter rows, fits 8-row tables
+     matrix    Comparison matrix — centered criterion cols, status cell colouring
+     split     Two-column body (ul / p flow into columns)
+     quote     Full-slide pull quote — large italic, left border
+     darkvoice Dark Voice dialogue slide — violet wash, suppressed header bar
+     verdict   Big centered verdict text (demo-check result)
+
+   ─── TABLE CELL STATUS SYNTAX ────────────────────────────────────────────────
+     **✓**   bold in cell   → green tint   (pass / warm)
+     *~*     italic in cell → amber tint   (partial)
+     ~~✗~~   del in cell    → red tint     (fail)   del stripped, just colour
+     `tag`   code in cell   → amber chip   (BMS tag / const)
+
+   ─── INLINE SYNTAX ───────────────────────────────────────────────────────────
+     > text          footnote (absolute bottom)
+     > **LABEL**     callout box (when first child of > is bold)
+     ---             horizontal rule — manuscript page divider
+     **text**        amber accent
+     *text*          stone-pale italic
+     ~~text~~        dim red (deprecated / dead)
+     `text`          amber monospace chip
 ============================================================================= */
 
 @import 'gaia';
 
-/*
-  Cormorant Garamond: roman + italic, weights 300–700.
-  subset=vietnamese ensures full diacritic coverage for:
-  ắ ặ ổ ừ ệ ướ ẫ ẽ — all tone + vowel-modifier combinations.
-  Source Code Pro retained for code blocks only.
-*/
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Code+Pro:wght@400;600&display=swap&subset=vietnamese');
 
 
-/* ─────────────────────────────────────────────
-   COLOR REGISTER
-   ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   ROOT — COLOUR REGISTER + TABLE VARIABLE SYSTEM
+   Each section class overrides --table-* vars so table headers
+   automatically pick up the slide's own colour palette.
+───────────────────────────────────────────────────────────────────────────── */
 
 :root {
   /* World A — Sacred Fire */
@@ -63,22 +73,97 @@
   --color-foreground: #cec4a4;
   --color-highlight:  #c8861a;
 
-  --header-h:   54px;
-  --stripe:      4px;   /* left-edge accent stripe width */
+  --header-h: 54px;
+  --stripe:    4px;
+
+  /* Table variable defaults (overridden per section class below) */
+  --tbl-head-bg:      rgba(100, 20, 20, 0.52);
+  --tbl-head-color:   var(--parchment);
+  --tbl-head-border:  rgba(200, 134, 26, 0.30);
+  --tbl-row-stripe:   rgba(200, 134, 26, 0.04);
+  --tbl-border:       rgba(200, 134, 26, 0.13);
+  --tbl-label-bg:     rgba(0, 0, 0, 0.22);
+  --tbl-label-color:  var(--ink);
+  --tbl-label-border: rgba(200, 134, 26, 0.20);
+  --tbl-accent-line:  var(--wa-fire);    /* bottom accent line colour */
+
+  /* Status cell background tints */
+  --cell-pass-bg:  rgba(60, 140, 60, 0.14);
+  --cell-pass-fg:  #7acc7a;
+  --cell-part-bg:  rgba(200, 134, 26, 0.13);
+  --cell-part-fg:  var(--wa-ember);
+  --cell-fail-bg:  rgba(160, 40, 40, 0.13);
+  --cell-fail-fg:  #c05858;
+}
+
+/* Per-section table colour overrides */
+section.wa   {
+  --tbl-head-bg:    rgba(100, 36, 4, 0.58);
+  --tbl-head-border: rgba(224, 160, 80, 0.35);
+  --tbl-accent-line: #dfa050;
+  --tbl-label-border: rgba(224, 160, 80, 0.22);
+}
+section.wb   {
+  --tbl-head-bg:    rgba(18, 48, 70, 0.62);
+  --tbl-head-border: rgba(90, 138, 170, 0.35);
+  --tbl-accent-line: #5a8aaa;
+  --tbl-label-border: rgba(90, 138, 170, 0.22);
+}
+section.bms  {
+  --tbl-head-bg:    rgba(70, 8, 22, 0.60);
+  --tbl-head-border: rgba(180, 40, 70, 0.35);
+  --tbl-accent-line: #c06070;
+  --tbl-label-border: rgba(180, 40, 70, 0.22);
+}
+section.va   {
+  --tbl-head-bg:    rgba(52, 22, 4, 0.58);
+  --tbl-head-border: rgba(200, 138, 60, 0.35);
+  --tbl-accent-line: #d09858;
+  --tbl-label-border: rgba(200, 138, 60, 0.22);
+}
+section.vb   {
+  --tbl-head-bg:    rgba(10, 24, 44, 0.62);
+  --tbl-head-border: rgba(100, 154, 194, 0.35);
+  --tbl-accent-line: #88b4d0;
+  --tbl-label-border: rgba(100, 154, 194, 0.22);
+}
+section.iron {
+  --tbl-head-bg:    rgba(70, 8, 8, 0.60);
+  --tbl-head-border: rgba(200, 48, 48, 0.40);
+  --tbl-accent-line: #cc4040;
+  --tbl-label-border: rgba(200, 48, 48, 0.22);
+}
+section.puzzle {
+  --tbl-head-bg:    rgba(40, 36, 16, 0.58);
+  --tbl-head-border: rgba(168, 155, 100, 0.35);
+  --tbl-accent-line: #b4a470;
+}
+section.demo {
+  --tbl-head-bg:    rgba(10, 44, 14, 0.58);
+  --tbl-head-border: rgba(80, 160, 80, 0.35);
+  --tbl-accent-line: #6ab46a;
+}
+section.audio {
+  --tbl-head-bg:    rgba(36, 14, 52, 0.60);
+  --tbl-head-border: rgba(160, 98, 200, 0.35);
+  --tbl-accent-line: #b488cc;
+}
+section.crossing {
+  --tbl-head-bg:    rgba(28, 20, 8, 0.52);
+  --tbl-head-border: rgba(120, 168, 138, 0.35);
+  --tbl-accent-line: #94bca4;
 }
 
 
-/* ─────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────────────────────
    BASE SECTION
-   ───────────────────────────────────────────── */
+───────────────────────────────────────────────────────────────────────────── */
 
 section {
   background-color: var(--color-background);
   background-image:
-    radial-gradient(ellipse 55% 40% at 10% 90%,
-      rgba(139, 26, 26, 0.07) 0%, transparent 100%),
-    radial-gradient(ellipse 45% 38% at 90% 10%,
-      rgba(18, 36, 60, 0.10) 0%, transparent 100%);
+    radial-gradient(ellipse 55% 40% at 10% 90%, rgba(139,26,26,0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 45% 38% at 90% 10%, rgba(18,36,60,0.10)  0%, transparent 100%);
 
   font-family:  'Cormorant Garamond', Georgia, serif;
   font-size:    20px;
@@ -92,7 +177,6 @@ section {
   line-height:    1.8;
 }
 
-/* Page counter */
 section::after {
   font-family:       'Cormorant Garamond', serif;
   font-variant-caps: small-caps;
@@ -104,16 +188,10 @@ section::after {
 }
 
 
-/* ─────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────────────────────
    TYPOGRAPHY
-   ───────────────────────────────────────────── */
+───────────────────────────────────────────────────────────────────────────── */
 
-/*
-  h1 in small-caps at display scale: the visual equivalent of
-  a Persian manuscript unwan (illuminated section heading).
-  Cormorant's small-caps are true drawn glyphs, not algorithmically
-  scaled — they hold their calligraphic weight at heading size.
-*/
 h1 {
   font-family:       'Cormorant Garamond', serif;
   font-weight:       600;
@@ -127,10 +205,6 @@ h1 {
   line-height:       1.15;
 }
 
-/*
-  h2 italic: Cormorant italic is where the Persian qalam reference
-  is strongest. High contrast, calligraphic entry/exit strokes.
-*/
 h2 {
   font-family:    'Cormorant Garamond', serif;
   font-weight:    500;
@@ -158,22 +232,16 @@ h4, h5 {
   color:             var(--stone-dim);
 }
 
-p {
-  font-weight: 400;
-  line-height: 1.82;
-  color:       var(--color-foreground);
-}
+p { font-weight: 400; line-height: 1.82; color: var(--color-foreground); }
 
-strong {
-  font-weight:         700;
-  color:               var(--wa-ember);
-  -webkit-text-stroke: 0;   /* override gaia */
-}
+strong { font-weight: 700; color: var(--wa-ember); -webkit-text-stroke: 0; }
 
-em {
-  font-style:  italic;
-  font-weight: 400;
-  color:       var(--stone-pale);
+em { font-style: italic; font-weight: 400; color: var(--stone-pale); }
+
+del {
+  text-decoration: line-through;
+  text-decoration-color: rgba(180, 50, 50, 0.55);
+  color: #a04848;
 }
 
 a {
@@ -183,16 +251,13 @@ a {
 }
 
 
-/* ─────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────────────────────
    LISTS
-   ───────────────────────────────────────────── */
+───────────────────────────────────────────────────────────────────────────── */
 
-ul, ol {
-  color:       var(--color-foreground);
-  line-height: 1.75;
-}
+ul, ol { color: var(--color-foreground); line-height: 1.75; }
 
-ul li::marker       { color: var(--wa-fire); }
+ul li::marker { color: var(--wa-fire); }
 
 ol li::marker {
   font-variant-caps: small-caps;
@@ -201,23 +266,39 @@ ol li::marker {
   font-size:         0.82em;
 }
 
-ul ul {
-  font-size: 0.9em;
-  color:     var(--stone-pale);
+ul ul               { font-size: 0.9em; color: var(--stone-pale); }
+ul ul li::marker    { color: var(--stone-mid); }
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HORIZONTAL RULE — manuscript page divider
+   A single amber hairline with fading ends, like the ruling
+   found between sections in Persian manuscript folios.
+───────────────────────────────────────────────────────────────────────────── */
+
+hr {
+  border:           none;
+  height:           1px;
+  background:       linear-gradient(
+                      to right,
+                      transparent 0%,
+                      rgba(200, 134, 26, 0.45) 20%,
+                      rgba(200, 134, 26, 0.55) 50%,
+                      rgba(200, 134, 26, 0.45) 80%,
+                      transparent 100%);
+  margin:           1.2em 0;
 }
 
-ul ul li::marker { color: var(--stone-mid); }
 
-
-/* ─────────────────────────────────────────────
-   CODE — Source Code Pro retained
-   ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   CODE
+───────────────────────────────────────────────────────────────────────────── */
 
 code {
   font-family:   'Source Code Pro', monospace;
   font-size:     0.80em;
-  background:    rgba(200, 134, 26, 0.08);
-  border:        1px solid rgba(200, 134, 26, 0.18);
+  background:    rgba(200, 134, 26, 0.09);
+  border:        1px solid rgba(200, 134, 26, 0.20);
   border-radius: 3px;
   padding:       0.06em 0.36em;
   color:         var(--wa-ember);
@@ -232,18 +313,26 @@ pre {
 }
 
 pre code {
-  background: none;
-  border:     none;
-  padding:    0;
-  color:      var(--parchment);
-  font-size:  0.76em;
+  background: none; border: none; padding: 0;
+  color: var(--parchment); font-size: 0.76em;
 }
 
 
-/* ─────────────────────────────────────────────
-   BLOCKQUOTE — footnote position (original)
-   ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   BLOCKQUOTE
 
+   Two distinct behaviours:
+   A) Default (no bold first child) — footnote, absolute bottom, 60% size.
+      Matches original kaisugi behaviour.
+
+   B) Callout (first child is <strong>) — inline box with left stripe,
+      background tint, full-size text. Used for key findings, verdicts,
+      Iron Law declarations.
+
+      Markdown:  > **Note:**  The Vanguard does not cross.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* A — Default footnote */
 blockquote {
   max-width:    90%;
   border-top:   1px solid rgba(200, 134, 26, 0.20);
@@ -257,52 +346,41 @@ blockquote {
   bottom:       20px;
   padding-top:  0.5em;
 }
-
 blockquote::before { content: ""; }
 blockquote::after  { content: ""; }
 blockquote p       { color: var(--stone-dim); margin: 0; }
 
-
-/* ─────────────────────────────────────────────
-   TABLES
-   ───────────────────────────────────────────── */
-
-table {
-  border-collapse: collapse;
-  font-size:       0.82em;
-  width:           100%;
+/* B — Callout box (first child is bold) */
+blockquote:has(> p > strong:first-child) {
+  position:      static;        /* pull out of absolute positioning */
+  font-size:     1em;
+  font-style:    normal;
+  font-weight:   400;
+  color:         var(--ink);
+  border-top:    none;
+  border-left:   3px solid var(--tbl-accent-line, var(--wa-fire));
+  background:    rgba(200, 134, 26, 0.07);
+  border-radius: 0 4px 4px 0;
+  padding:       0.65em 1.1em;
+  margin:        0.9em 0;
+  max-width:     100%;
 }
-
-th {
-  font-family:       'Cormorant Garamond', serif;
+blockquote:has(> p > strong:first-child) p {
+  color:   var(--ink);
+  margin:  0;
+}
+blockquote:has(> p > strong:first-child) strong {
   font-variant-caps: small-caps;
-  font-weight:       600;
-  letter-spacing:    0.05em;
-  background:        rgba(139, 26, 26, 0.32);
-  color:             var(--parchment);
-  border:            1px solid rgba(200, 134, 26, 0.18);
-  padding:           0.4em 0.85em;
-}
-
-td {
-  border:  1px solid rgba(200, 134, 26, 0.10);
-  padding: 0.36em 0.85em;
-  color:   var(--color-foreground);
-}
-
-tr:nth-child(even) td {
-  background: rgba(255, 255, 255, 0.02);
+  letter-spacing:    0.04em;
+  margin-right:      0.4em;
 }
 
 
-/* ─────────────────────────────────────────────
-   HELPERS
-   ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   INLINE HELPERS
+───────────────────────────────────────────────────────────────────────────── */
 
-img[alt~="center"] { display: block; margin: 0 auto; }
-img[alt~="small"]  { max-width: 38%; }
-
-/* Inline BMS register label */
+/* BMS register labels / system tags */
 mark {
   background:    rgba(139, 26, 26, 0.28);
   color:         var(--wa-ember);
@@ -313,15 +391,382 @@ mark {
   font-size:     0.82em;
 }
 
+/* <kbd> — keyboard label / stage badge */
+kbd {
+  font-family:       'Cormorant Garamond', serif;
+  font-variant-caps: small-caps;
+  font-weight:       600;
+  font-size:         0.78em;
+  letter-spacing:    0.06em;
+  background:        rgba(0, 0, 0, 0.30);
+  border:            1px solid rgba(200, 134, 26, 0.30);
+  border-bottom:     2px solid rgba(200, 134, 26, 0.40);
+  border-radius:     4px;
+  padding:           0.08em 0.55em;
+  color:             var(--parchment);
+}
 
-/* ═══════════════════════════════════════════════════════════════════════
-   THE HEADER — DEFAULT  (Archive General)
 
-   Cormorant Garamond small-caps at wide tracking replicates the formal
-   register of Persian manuscript section headings (unwan). The left-edge
-   stripe echoes the vertical ruling found in Persian manuscript layouts.
-   Gradient fades right — depth preserved against dark background.
-═══════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────────
+   ████████  TABLE SYSTEM  ████████
+
+   Architecture:
+   · CSS variables (set per section class in root block above) control
+     header bg, accent colours, and borders without touching table rules.
+   · First column treated as row-label: darker bg, small-caps, right border.
+   · Status cell colouring via :has() — targets td with single child element.
+   · section.compact reduces row height for dense slides.
+   · section.matrix widens criterion cols, disables text wrap in data cells.
+───────────────────────────────────────────────────────────────────────────── */
+
+table {
+  border-collapse: separate;
+  border-spacing:  0;
+  font-size:       0.83em;
+  width:           100%;
+  /* Bottom accent line — matches section palette */
+  border-bottom:   2px solid var(--tbl-accent-line, var(--wa-fire));
+  border-radius:   0 0 4px 4px;
+  overflow:        hidden;
+  /* Top outer border */
+  outline:         1px solid var(--tbl-border);
+}
+
+/* ── Header row ── */
+th {
+  font-family:       'Cormorant Garamond', serif;
+  font-variant-caps: small-caps;
+  font-weight:       600;
+  letter-spacing:    0.055em;
+  font-size:         1em;              /* relative to table font-size */
+  text-align:        center;
+  vertical-align:    middle;
+  white-space:       nowrap;
+
+  background:    var(--tbl-head-bg);
+  color:         var(--tbl-head-color, var(--parchment));
+  border-bottom: 2px solid var(--tbl-head-border);
+  border-right:  1px solid rgba(255, 255, 255, 0.06);
+  padding:       0.50em 0.90em;
+}
+
+th:last-child { border-right: none; }
+
+/* First th — wider row-label column */
+th:first-child {
+  text-align:   left;
+  padding-left: 1.0em;
+  min-width:    6em;
+}
+
+/* ── Data rows ── */
+td {
+  text-align:     center;
+  vertical-align: middle;
+  color:          var(--color-foreground);
+  border-right:   1px solid var(--tbl-border);
+  border-bottom:  1px solid var(--tbl-border);
+  padding:        0.42em 0.90em;
+  transition:     background 0.15s;
+}
+
+td:last-child  { border-right: none; }
+tr:last-child td { border-bottom: none; }
+
+/* Alternating rows — visible zebra */
+tr:nth-child(even) td {
+  background: var(--tbl-row-stripe);
+}
+
+/* ── First column as row-label ── */
+td:first-child {
+  font-variant-caps: small-caps;
+  font-weight:       500;
+  font-size:         0.95em;
+  letter-spacing:    0.03em;
+  text-align:        left;
+  padding-left:      1.0em;
+
+  background:    var(--tbl-label-bg) !important; /* override zebra on label col */
+  color:         var(--tbl-label-color);
+  border-right:  2px solid var(--tbl-label-border);
+}
+
+/* ── STATUS CELL COLOURING ──────────────────────────────────────────────────
+   Markdown syntax → HTML output → CSS target:
+
+     **✓**   <td><strong>✓</strong></td>   → green tint
+     *~*     <td><em>~</em></td>           → amber tint
+     ~~✗~~   <td><del>✗</del></td>         → red tint   (strikethrough suppressed in td)
+
+   :has() is supported in Chromium 105+ and Safari 15.4+, which covers all
+   Marp PDF/HTML export targets.
+─────────────────────────────────────────────────────────────────────────── */
+
+/* Pass — bold child */
+td:has(> strong:only-child) {
+  background: var(--cell-pass-bg) !important;
+}
+td:has(> strong:only-child) strong {
+  color:       var(--cell-pass-fg);
+  font-weight: 700;
+}
+
+/* Partial — italic child */
+td:has(> em:only-child) {
+  background: var(--cell-part-bg) !important;
+}
+td:has(> em:only-child) em {
+  color:      var(--cell-part-fg);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Fail — del child (strip strikethrough inside cells) */
+td:has(> del:only-child) {
+  background: var(--cell-fail-bg) !important;
+}
+td:has(> del:only-child) del {
+  text-decoration: none;
+  color:           var(--cell-fail-fg);
+}
+
+/* Code chip inside a cell */
+td code {
+  font-size:   0.82em;
+  padding:     0.03em 0.28em;
+  white-space: nowrap;
+}
+
+/* Bold in a regular data cell (not only-child) — amber text only */
+td strong { color: var(--wa-ember); -webkit-text-stroke: 0; }
+td em     { color: var(--stone-pale); font-style: italic; }
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LAYOUT MODIFIER CLASSES
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ── compact ─────────────────────────────────────────────────────────────────
+   Dense slide — smaller base font, tighter everything.
+   Fits 8–10 row tables or heavy bullet lists on one slide.
+   Stack with any header class: <!-- _class: compact bms -->
+───────────────────────────────────────────────────────────────────────────── */
+
+section.compact {
+  font-size:      16px;
+  line-height:    1.55;
+  padding-top:    calc(var(--header-h) + 14px);
+  padding-left:   44px;
+  padding-right:  44px;
+  padding-bottom: 28px;
+}
+
+section.compact h1 { font-size: 1.55em; margin-bottom: 0.3em; }
+section.compact h2 { font-size: 1.05em; }
+section.compact h3 { font-size: 0.92em; }
+
+section.compact table { font-size: 0.82em; }
+
+section.compact th,
+section.compact td  { padding: 0.30em 0.75em; }
+
+section.compact th:first-child,
+section.compact td:first-child { padding-left: 0.85em; }
+
+section.compact ul,
+section.compact ol  { line-height: 1.52; }
+
+
+/* ── matrix ──────────────────────────────────────────────────────────────────
+   Comparison matrix slide — for KENOMA's game-comparison tables.
+   Criterion columns (2nd col onward) are fixed-width and centered.
+   First column is wider for game names.
+   Use with compact for many-row matrices.
+───────────────────────────────────────────────────────────────────────────── */
+
+section.matrix table { font-size: 0.80em; table-layout: fixed; }
+
+section.matrix th:first-child,
+section.matrix td:first-child {
+  width:       26%;
+  white-space: normal;
+  font-size:   1em;
+}
+
+section.matrix th:not(:first-child),
+section.matrix td:not(:first-child) {
+  width:       auto;
+  white-space: nowrap;
+  font-size:   0.95em;
+  text-align:  center;
+}
+
+/* Slightly bolder pass/fail symbols in matrix context */
+section.matrix td:has(> strong:only-child) strong { font-size: 1.1em; }
+section.matrix td:has(> del:only-child)    del    { font-size: 1.1em; }
+
+
+/* ── split ───────────────────────────────────────────────────────────────────
+   Two-column body. Lists and paragraphs flow into two columns.
+   The h1/h2 title spans full width above.
+   Column rule is a faint amber hairline.
+───────────────────────────────────────────────────────────────────────────── */
+
+section.split ul,
+section.split ol {
+  column-count:   2;
+  column-gap:     2.6em;
+  column-rule:    1px solid rgba(200, 134, 26, 0.14);
+}
+
+/* Prevent single list items from being orphaned across columns */
+section.split li { break-inside: avoid; }
+
+/* Paragraphs also split when there's more than one */
+section.split p + p {
+  column-count: 2;
+  column-gap:   2.6em;
+}
+
+
+/* ── quote ───────────────────────────────────────────────────────────────────
+   Full-slide pull quote. Vertically centred.
+   The paragraph is large italic with a left amber border.
+   Stack with a Vanguard class for voice-coded quotes:
+     <!-- _class: quote va -->
+     > "South entrance. The oil is there."
+───────────────────────────────────────────────────────────────────────────── */
+
+section.quote {
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  padding-top:     var(--header-h);
+}
+
+section.quote p {
+  font-size:    1.45em;
+  font-style:   italic;
+  font-weight:  300;
+  line-height:  1.62;
+  color:        var(--parchment);
+  border-left:  3px solid var(--tbl-accent-line, var(--wa-fire));
+  padding-left: 1.2em;
+  max-width:    88%;
+  margin:       0 auto 0 0;
+}
+
+section.quote strong {
+  font-variant-caps: small-caps;
+  font-style:        normal;
+  font-weight:       600;
+  letter-spacing:    0.04em;
+}
+
+section.quote h2 {
+  font-size:   0.88em;
+  font-style:  italic;
+  color:       var(--stone-dim);
+  margin-top:  1.4em;
+  padding-left: calc(1.2em + 3px + 1.2em); /* align under quote text */
+}
+
+
+/* ── darkvoice ───────────────────────────────────────────────────────────────
+   Dark Voice dialogue slide. Violet wash, header bar suppressed.
+   Large italic text, Scholar's internal analytical register.
+   The spatial origin label goes in h4 below the line.
+───────────────────────────────────────────────────────────────────────────── */
+
+section.darkvoice {
+  background-color: #060408;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(80, 30, 100, 0.10) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 35% at 15% 80%, rgba(139, 26, 26, 0.06) 0%, transparent 100%);
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  padding-top:     var(--header-h);
+}
+
+section.darkvoice p {
+  font-size:   1.30em;
+  font-style:  italic;
+  font-weight: 300;
+  line-height: 1.72;
+  color:       #c8aade;
+  max-width:   82%;
+}
+
+section.darkvoice h4 {
+  font-variant-caps: small-caps;
+  font-weight:       500;
+  font-size:         0.72em;
+  letter-spacing:    0.16em;
+  color:             rgba(160, 100, 200, 0.55);
+  margin-top:        1.8em;
+}
+
+/* Spatial origin keyword */
+section.darkvoice strong {
+  color:       rgba(180, 120, 220, 0.85);
+  font-weight: 600;
+  font-style:  normal;
+}
+
+/* Suppress header bar — this slide is the Dark Voice's space */
+section.darkvoice header {
+  background:    transparent;
+  border-bottom: none;
+  box-shadow:    none;
+  color:         transparent;
+}
+section.darkvoice header::before { content: ''; }
+
+
+/* ── verdict ─────────────────────────────────────────────────────────────────
+   Demo-check verdict slide. Single large statement, centred vertically.
+   The h1 gets no border. Colour is driven by the stacked header class.
+   Example:
+     <!-- _class: verdict demo -->
+     # Externally Showable
+     ## The Vanguard treated me differently based on what I chose.
+───────────────────────────────────────────────────────────────────────────── */
+
+section.verdict {
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  padding-top:     var(--header-h);
+  text-align:      left;
+}
+
+section.verdict h1 {
+  font-size:     2.8em;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom:  0.25em;
+  letter-spacing: 0.04em;
+}
+
+section.verdict h2 {
+  font-size:    1.05em;
+  font-weight:  300;
+  color:        var(--stone-pale);
+  margin-top:   0;
+}
+
+section.verdict p {
+  font-size:  0.9em;
+  color:      var(--stone-dim);
+  margin-top: 1.6em;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ████████  HEADER SYSTEM  ████████
+───────────────────────────────────────────────────────────────────────────── */
 
 header {
   height:      var(--header-h);
@@ -337,22 +782,13 @@ header {
   letter-spacing:    0.10em;
   color:             var(--wa-fire);
 
-  background: linear-gradient(
-    105deg,
-    #1c1208 0%,
-    #251a0a 40%,
-    #1a1006 100%
-  );
+  background: linear-gradient(105deg, #1c1208 0%, #251a0a 40%, #1a1006 100%);
   border-bottom: 1px solid rgba(200, 134, 26, 0.20);
   box-shadow:
     inset var(--stripe) 0 0 rgba(200, 134, 26, 0.55),
     0 3px 16px rgba(0, 0, 0, 0.70);
 }
 
-/*
-  ⌖  — position indicator, the compass medallion of Persian illumination.
-  font-variant-caps: normal prevents the glyph from being small-capped.
-*/
 header::before {
   content:           '⌖';
   font-variant-caps: normal;
@@ -362,228 +798,97 @@ header::before {
   line-height:       1;
 }
 
-
-/* ═══════════════════════════════════════════════════════════════════════
-   wa — World A, Sacred Fire
-═══════════════════════════════════════════════════════════════════════ */
-
+/* wa */
 section.wa header {
   background: linear-gradient(105deg, #2a0e04 0%, #3c1c08 42%, #281006 100%);
   border-bottom: 1px solid rgba(224, 160, 80, 0.36);
   color: var(--wa-ember);
-  box-shadow:
-    inset var(--stripe) 0 0 #e0a050,
-    0 3px 20px rgba(200, 80, 10, 0.16);
+  box-shadow: inset var(--stripe) 0 0 #e0a050, 0 3px 20px rgba(200,80,10,0.16);
 }
+section.wa header::before { content: '🔥'; font-variant-caps: normal; font-size: 0.92em; filter: drop-shadow(0 0 5px rgba(255,160,40,0.45)); }
 
-section.wa header::before {
-  content:           '🔥';
-  font-variant-caps: normal;
-  font-size:         0.92em;
-  filter:            drop-shadow(0 0 5px rgba(255, 160, 40, 0.45));
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   wb — World B, The Hollow
-═══════════════════════════════════════════════════════════════════════ */
-
+/* wb */
 section.wb header {
   background: linear-gradient(105deg, #04080f 0%, #0a1622 42%, #060c14 100%);
   border-bottom: 1px solid rgba(90, 138, 170, 0.30);
   color: #80aec8;
-  box-shadow:
-    inset var(--stripe) 0 0 #5a8aaa,
-    0 3px 14px rgba(0, 18, 38, 0.45);
+  box-shadow: inset var(--stripe) 0 0 #5a8aaa, 0 3px 14px rgba(0,18,38,0.45);
 }
+section.wb header::before { content: '◎'; font-variant-caps: normal; font-size: 1.05em; color: rgba(90,138,170,0.55); }
 
-section.wb header::before {
-  content:           '◎';
-  font-variant-caps: normal;
-  font-size:         1.05em;
-  color:             rgba(90, 138, 170, 0.55);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   bms — Behavioral Model System
-═══════════════════════════════════════════════════════════════════════ */
-
+/* bms */
 section.bms header {
   background: linear-gradient(105deg, #0f0408 0%, #200810 42%, #140408 100%);
   border-bottom: 1px solid rgba(180, 40, 70, 0.40);
   color: #c06070;
-  box-shadow:
-    inset var(--stripe) 0 0 #8b1a2a,
-    0 3px 14px rgba(100, 0, 20, 0.28);
+  box-shadow: inset var(--stripe) 0 0 #8b1a2a, 0 3px 14px rgba(100,0,20,0.28);
 }
+section.bms header::before { content: '▸▸'; font-variant-caps: normal; font-size: 0.86em; letter-spacing: -0.08em; color: rgba(139,26,42,0.78); }
 
-section.bms header::before {
-  content:           '▸▸';
-  font-variant-caps: normal;
-  font-size:         0.86em;
-  letter-spacing:    -0.08em;
-  color:             rgba(139, 26, 42, 0.78);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   vanguard — both Vanguards (generic)
-═══════════════════════════════════════════════════════════════════════ */
-
+/* vanguard (generic) */
 section.vanguard header {
   background: linear-gradient(105deg, #10100a 0%, #1e1c10 42%, #141208 100%);
   border-bottom: 1px solid rgba(200, 188, 100, 0.26);
   color: #beb068;
-  box-shadow:
-    inset var(--stripe) 0 0 #a09840,
-    0 3px 14px rgba(0, 0, 0, 0.56);
+  box-shadow: inset var(--stripe) 0 0 #a09840, 0 3px 14px rgba(0,0,0,0.56);
 }
+section.vanguard header::before { content: '◈'; font-variant-caps: normal; font-size: 1.05em; color: rgba(160,152,64,0.60); }
 
-section.vanguard header::before {
-  content:           '◈';
-  font-variant-caps: normal;
-  font-size:         1.05em;
-  color:             rgba(160, 152, 64, 0.60);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   va — Vanguard A
-═══════════════════════════════════════════════════════════════════════ */
-
+/* va */
 section.va header {
   background: linear-gradient(105deg, #180e04 0%, #281808 42%, #1c1004 100%);
   border-bottom: 1px solid rgba(200, 138, 60, 0.30);
   color: #d09858;
-  box-shadow:
-    inset var(--stripe) 0 0 #c07828,
-    0 3px 14px rgba(140, 64, 10, 0.20);
+  box-shadow: inset var(--stripe) 0 0 #c07828, 0 3px 14px rgba(140,64,10,0.20);
 }
+section.va header::before { content: '— VA'; font-variant-caps: normal; font-size: 0.80em; letter-spacing: 0.20em; color: rgba(192,120,40,0.70); }
 
-section.va header::before {
-  content:           '— VA';
-  font-variant-caps: normal;
-  font-size:         0.80em;
-  letter-spacing:    0.20em;
-  color:             rgba(192, 120, 40, 0.70);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   vb — Vanguard B
-═══════════════════════════════════════════════════════════════════════ */
-
+/* vb */
 section.vb header {
   background: linear-gradient(105deg, #060c16 0%, #0e1c2e 42%, #081422 100%);
   border-bottom: 1px solid rgba(100, 154, 194, 0.26);
   color: #88b4d0;
-  box-shadow:
-    inset var(--stripe) 0 0 #5a8aaa,
-    0 3px 14px rgba(10, 28, 58, 0.30);
+  box-shadow: inset var(--stripe) 0 0 #5a8aaa, 0 3px 14px rgba(10,28,58,0.30);
 }
+section.vb header::before { content: '— VB'; font-variant-caps: normal; font-size: 0.80em; letter-spacing: 0.20em; color: rgba(90,138,170,0.65); }
 
-section.vb header::before {
-  content:           '— VB';
-  font-variant-caps: normal;
-  font-size:         0.80em;
-  letter-spacing:    0.20em;
-  color:             rgba(90, 138, 170, 0.65);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   puzzle — Puzzle / Mechanic
-═══════════════════════════════════════════════════════════════════════ */
-
+/* puzzle */
 section.puzzle header {
   background: linear-gradient(105deg, #0e0e08 0%, #1c1a0c 42%, #111006 100%);
   border-bottom: 1px solid rgba(168, 155, 100, 0.26);
   color: #b4a470;
-  box-shadow:
-    inset var(--stripe) 0 0 #887850,
-    0 3px 14px rgba(0, 0, 0, 0.50);
+  box-shadow: inset var(--stripe) 0 0 #887850, 0 3px 14px rgba(0,0,0,0.50);
 }
+section.puzzle header::before { content: '⊞'; font-variant-caps: normal; font-size: 1.08em; color: rgba(136,120,80,0.60); }
 
-section.puzzle header::before {
-  content:           '⊞';
-  font-variant-caps: normal;
-  font-size:         1.08em;
-  color:             rgba(136, 120, 80, 0.60);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   iron — Iron Laws (2px border — heavier than all other sections)
-═══════════════════════════════════════════════════════════════════════ */
-
+/* iron */
 section.iron header {
   background: linear-gradient(105deg, #090606 0%, #160c0c 42%, #0e0606 100%);
   border-bottom: 2px solid rgba(200, 48, 48, 0.52);
   color: #cc4040;
-  box-shadow:
-    inset var(--stripe) 0 0 #b82828,
-    0 3px 20px rgba(140, 0, 0, 0.20);
+  box-shadow: inset var(--stripe) 0 0 #b82828, 0 3px 20px rgba(140,0,0,0.20);
 }
+section.iron header::before { content: '⚑'; font-variant-caps: normal; font-size: 1.00em; color: rgba(184,40,40,0.72); }
 
-section.iron header::before {
-  content:           '⚑';
-  font-variant-caps: normal;
-  font-size:         1.00em;
-  color:             rgba(184, 40, 40, 0.72);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   demo — Demo / Verification
-═══════════════════════════════════════════════════════════════════════ */
-
+/* demo */
 section.demo header {
   background: linear-gradient(105deg, #040e06 0%, #0a1c0e 42%, #071008 100%);
   border-bottom: 1px solid rgba(80, 160, 80, 0.30);
   color: #6ab46a;
-  box-shadow:
-    inset var(--stripe) 0 0 #4c8050,
-    0 3px 14px rgba(0, 38, 0, 0.28);
+  box-shadow: inset var(--stripe) 0 0 #4c8050, 0 3px 14px rgba(0,38,0,0.28);
 }
+section.demo header::before { content: '✓'; font-variant-caps: normal; font-size: 1.10em; color: rgba(76,128,80,0.70); }
 
-section.demo header::before {
-  content:           '✓';
-  font-variant-caps: normal;
-  font-size:         1.10em;
-  color:             rgba(76, 128, 80, 0.70);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   audio — Audio / Dark Voice binaural
-   ))) glyph: the three spatial origins Behind / Beside / Ahead
-═══════════════════════════════════════════════════════════════════════ */
-
+/* audio */
 section.audio header {
   background: linear-gradient(105deg, #0c0810 0%, #1a1026 42%, #100c18 100%);
   border-bottom: 1px solid rgba(160, 98, 200, 0.26);
   color: #b488cc;
-  box-shadow:
-    inset var(--stripe) 0 0 #7a4898,
-    0 3px 14px rgba(58, 0, 78, 0.20);
+  box-shadow: inset var(--stripe) 0 0 #7a4898, 0 3px 14px rgba(58,0,78,0.20);
 }
+section.audio header::before { content: ')))'; font-variant-caps: normal; font-size: 0.82em; letter-spacing: -0.14em; color: rgba(122,72,152,0.68); }
 
-section.audio header::before {
-  content:           ')))';
-  font-variant-caps: normal;
-  font-size:         0.82em;
-  letter-spacing:    -0.14em;
-  color:             rgba(122, 72, 152, 0.68);
-}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   crossing — Traversal / Iron Rule
-   Dual stripe: amber left (World A) + cold blue right (World B).
-   The only header encoding the Iron Rule in its own visual structure.
-═══════════════════════════════════════════════════════════════════════ */
-
+/* crossing */
 section.crossing header {
   background: linear-gradient(105deg, #160e04 0%, #0a1420 50%, #060c10 100%);
   border-bottom: 1px solid rgba(120, 168, 138, 0.26);
@@ -591,33 +896,21 @@ section.crossing header {
   box-shadow:
     inset  var(--stripe) 0 0 #c8861a,
     inset calc(-1 * var(--stripe)) 0 0 #5a8aaa,
-    0 3px 14px rgba(0, 0, 0, 0.52);
+    0 3px 14px rgba(0,0,0,0.52);
 }
-
-section.crossing header::before {
-  content:           '⇌';
-  font-variant-caps: normal;
-  font-size:         1.12em;
-  color:             rgba(100, 158, 128, 0.62);
-}
+section.crossing header::before { content: '⇌'; font-variant-caps: normal; font-size: 1.12em; color: rgba(100,158,128,0.62); }
 
 
-/* ═══════════════════════════════════════════════════════════════════════
-   lead — Title / Cover Slide
-   Header bar suppressed. h1 at display scale in Cormorant small-caps:
-   the calligraphic quality most closely resembles a Persian manuscript
-   unwan at this size and weight combination.
-═══════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────────
+   LEAD — Title / Cover Slide
+───────────────────────────────────────────────────────────────────────────── */
 
 section.lead {
   background-color: #070502;
   background-image:
-    radial-gradient(ellipse 58% 52% at 16% 84%,
-      rgba(139, 26, 26, 0.13) 0%, transparent 100%),
-    radial-gradient(ellipse 50% 46% at 84% 16%,
-      rgba(16, 38, 70, 0.11) 0%, transparent 100%),
-    radial-gradient(ellipse 72% 62% at 50% 50%,
-      rgba(200, 134, 26, 0.04) 0%, transparent 100%);
+    radial-gradient(ellipse 58% 52% at 16% 84%, rgba(139,26,26,0.13)  0%, transparent 100%),
+    radial-gradient(ellipse 50% 46% at 84% 16%, rgba(16,38,70,0.11)   0%, transparent 100%),
+    radial-gradient(ellipse 72% 62% at 50% 50%, rgba(200,134,26,0.04) 0%, transparent 100%);
   display:         flex;
   flex-direction:  column;
   justify-content: center;
@@ -625,7 +918,6 @@ section.lead {
 }
 
 section.lead h1 {
-  font-family:       'Cormorant Garamond', serif;
   font-variant-caps: small-caps;
   font-weight:       600;
   font-size:         2.4em;
@@ -639,10 +931,7 @@ section.lead h1 {
   line-height:       1.1;
 }
 
-section.lead h1 strong {
-  -webkit-text-stroke: 0;
-  color:               #f0b870;
-}
+section.lead h1 strong { -webkit-text-stroke: 0; color: #f0b870; }
 
 section.lead h2 {
   font-style:     italic;
@@ -654,10 +943,7 @@ section.lead h2 {
   letter-spacing: 0.01em;
 }
 
-section.lead h2 strong {
-  -webkit-text-stroke: 0;
-  color:               var(--stone-pale);
-}
+section.lead h2 strong { -webkit-text-stroke: 0; color: var(--stone-pale); }
 
 section.lead h3 {
   font-weight:  300;
@@ -669,14 +955,13 @@ section.lead h3 {
 }
 
 section.lead p {
-  font-style:  italic;
-  font-weight: 300;
-  font-size:   0.88em;
-  color:       var(--stone-mid);
-  text-align:  left;
+  font-style:   italic;
+  font-weight:  300;
+  font-size:    0.88em;
+  color:        var(--stone-mid);
+  text-align:   left;
 }
 
-/* Suppress header bar on lead */
 section.lead header {
   background:    transparent;
   border-bottom: none;
